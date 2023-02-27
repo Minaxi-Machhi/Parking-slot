@@ -27,14 +27,14 @@ export default {
     ];
 
     const isLoggedIn = computed(() => {
-      return localStorage.getItem("loggedUser");
+      return localStorage.getItem("user");
     });
 
     // onMounted(() => {});
 
     function logoutUser() {
       console.log("here");
-      localStorage.removeItem("loggedUser");
+      localStorage.removeItem("user");
       router.push({ name: "MainPage" });
     }
     return { isLoggedIn, items, logoutUser, tab };

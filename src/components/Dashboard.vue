@@ -1,10 +1,12 @@
 <template>
   <v-sheet class="bg-deep-purple pa-12" rounded>
-    abc
+    <v-label
+      ><h2>{{ getUser }}</h2></v-label
+    >
     <v-table>
       <thead>
         <tr>
-          <!-- <th>User Name</th> -->
+          <th>Date</th>
           <th>Start Time</th>
           <th>End Time</th>
           <th>Slot</th>
@@ -13,13 +15,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="booking in bookings" :key="id">
-          <!-- <td>{{ booking.username }}</td> -->
-          <td>{{ booking.starttime }}</td>
-          <td>{{ booking.endtime }}</td>
+        <tr v-if="bookings?.length" v-for="booking in bookings" :key="id">
+          <td>{{ booking.date ? booking.date : currentDate }}</td>
+          <td>{{ booking.starttime ? booking.starttime : currentTime }}</td>
+          <td>{{ booking.endtime ? booking.endtime : "-" }}</td>
           <td>{{ booking.slot }}</td>
           <td>{{ booking.block }}</td>
-          <td>{{ booking.status }}</td>
+        </tr>
+        <tr v-else>
+          <td>No bookings</td>
         </tr>
       </tbody>
     </v-table>
@@ -28,24 +32,47 @@
 
 <script>
 import axios from "axios";
-import { onMounted, ref } from "vue";
+import { onMounted, computed, ref } from "vue";
 
 export default {
   setup() {
     const bookings = ref(null);
 
-    onMounted(async () => {
-      await axios
-        .get("http://localhost:3001/bookings", {
-          params: { username: "abc" },
-        })
-        .then((res) => {
-          console.log("res", res.data[0].records);
-          bookings.value = res.data[0]?.records;
-        });
+    const currentDate = computed(() => {
+      const current = new Date();
+      const date = `${current.getDate()}/${
+        current.getMonth() + 1
+      }/${current.getFullYear()}`;
+      return date;
     });
 
-    return { bookings };
+    const currentTime = computed(() => {
+      const current = new Date();
+      return (
+        current.getHours() +
+        ":" +
+        current.getMinutes() +
+        ":" +
+        current.getSeconds()
+      );
+    });
+
+    const getUser = computed(() => {
+      const user = localStorage.getItem("user");
+      return user;
+    });
+
+    onMounted(async () => {
+      if (getUser) {
+        await axios
+          .get("http://localhost:3001/bookings?username=" + getUser.value)
+          .then((res) => {
+            bookings.value = res.data;
+          });
+      }
+    });
+
+    return { bookings, currentDate, currentTime, getUser };
   },
 };
 </script>

@@ -86,36 +86,21 @@ export default {
         users = res.data;
       });
 
-      users.filter((user) => {
-        if (user.email === email.value && user.password === password.value) {
-          toast("Login successful !!! !", {
-            autoClose: 2000,
-          });
-          router.push({ name: "Booking" });
-        } else if (
-          user.email === email.value &&
-          user.password !== password.value
-        ) {
-          toast.error("Invalid Password", {
-            autoClose: 2000,
-          });
-        } else if (
-          user.password === password.value &&
-          user.email !== email.value
-        ) {
-          {
-            toast.error("Invalid Email ID", {
-              autoClose: 2000,
-            });
-          }
-        } else {
-          {
-            toast.error("User not found", {
-              autoClose: 2000,
-            });
-          }
-        }
-      });
+      const isMatched = users.find(
+        (user) => user.email === email.value && user.password === password.value
+      );
+
+      if (isMatched) {
+        toast("Login successful !!! !", {
+          autoClose: 2000,
+        });
+        localStorage.setItem("user", isMatched.username);
+        router.push({ name: "Booking" });
+      } else {
+        toast.error("Invalid Credentials !!! !", {
+          autoClose: 2000,
+        });
+      }
     }
 
     return {
