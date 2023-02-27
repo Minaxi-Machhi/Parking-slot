@@ -1,16 +1,10 @@
 {
   "users": [
     {
-      "id": 1,
-      "name": "Minaxi",
-      "email": "abc@gmail.com",
-      "password": "abc@gmail.com"
-    },
-    {
-      "id": 2,
-      "name": "deesha",
-      "email": "deesha@gmail.com",
-      "password": "deesha@gmail.com"
+      "username": "hina",
+      "email": "hina@gmail.com",
+      "password": "hina@gmail.com",
+      "id": 1
     }
   ],
   "bookings": [
@@ -27,7 +21,7 @@
           "status": "done"
         },
         {
-          "recordId": "1",
+          "recordId": "2",
           "starttime": "07:00",
           "endtime": "15:00",
           "slot": "1",
@@ -35,7 +29,7 @@
           "status": "done"
         },
         {
-          "recordId": "1",
+          "recordId": "3",
           "starttime": "07:00",
           "endtime": "15:00",
           "slot": "1",
@@ -46,7 +40,7 @@
     },
     {
       "id": 2,
-      "username": "Dev",
+      "username": "xyz",
       "records": [
         {
           "recordId": "1",

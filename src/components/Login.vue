@@ -33,6 +33,7 @@
           Sign In
         </v-btn>
       </v-form>
+
       <v-card-actions>
         <v-spacer></v-spacer>
 
@@ -50,6 +51,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import axios from "axios";
 
 export default {
   setup(ctx) {
@@ -72,20 +74,50 @@ export default {
         P;
       },
     ];
+
     function onClick() {
       router.push("/register");
     }
-    function onSubmit() {
-      const user = localStorage.getItem("users");
-      if (email.value === JSON.parse(user).email && password.value) {
-        toast("Login successful !!! !", {
-          autoClose: 1000,
-        });
-        localStorage.setItem("loggedUser", user);
-        // ctx.emit("refresh-page");
-        router.push({ name: "Booking" });
-      }
+
+    async function onSubmit() {
+      let users = [];
+
+      await axios.get("http://localhost:3001/users").then((res) => {
+        users = res.data;
+      });
+
+      users.filter((user) => {
+        if (user.email === email.value && user.password === password.value) {
+          toast("Login successful !!! !", {
+            autoClose: 2000,
+          });
+          router.push({ name: "Booking" });
+        } else if (
+          user.email === email.value &&
+          user.password !== password.value
+        ) {
+          toast.error("Invalid Password", {
+            autoClose: 2000,
+          });
+        } else if (
+          user.password === password.value &&
+          user.email !== email.value
+        ) {
+          {
+            toast.error("Invalid Email ID", {
+              autoClose: 2000,
+            });
+          }
+        } else {
+          {
+            toast.error("User not found", {
+              autoClose: 2000,
+            });
+          }
+        }
+      });
     }
+
     return {
       email,
       emailRules,

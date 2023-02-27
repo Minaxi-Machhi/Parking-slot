@@ -14,12 +14,6 @@
           label="Email ID"
         ></v-text-field>
 
-        <!-- <v-text-field
-          v-model="phone"
-          :rules="phoneRules"
-          label="Phone Number"
-        ></v-text-field> -->
-
         <v-text-field
           v-model="password"
           :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -52,11 +46,11 @@
           >Submit</v-btn
         >
       </v-form>
+
       <v-divider></v-divider>
 
       <v-card-actions>
         <v-spacer></v-spacer>
-
         <v-btn color="error" @click="onClick">
           Already have account
           <v-icon icon="mdi-chevron-right" end></v-icon>
@@ -71,6 +65,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import axios from "axios";
 
 export default {
   setup() {
@@ -93,6 +88,7 @@ export default {
         return "First name must be at least 3 characters.";
       },
     ];
+
     const emailRules = [
       (value) => {
         if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true;
@@ -100,6 +96,7 @@ export default {
         return "Must be a valid e-mail.";
       },
     ];
+
     const phoneRules = [
       (value) => {
         if (value?.length > 9 && /[0-9-]+/.test(value)) return true;
@@ -107,26 +104,40 @@ export default {
         return "Phone number needs to be at least 9 digits.";
       },
     ];
+
     const rules = {
       required: (value) => !!value || "Required.",
       min: (v) => v.length >= 8 || "Min 8 characters",
       emailMatch: () => `The email and password you entered don't match`,
     };
+
     function onClick() {
       router.push("/login");
     }
-    function onSubmit() {
-      const userData = {
+
+    async function onSubmit() {
+      
+      const data = {
         username: userName.value,
         email: email.value,
         password: password.value,
-        confirmPassword: confirmPassword.value,
       };
-      toast("Registration successful" + userName.value + "!!!", {
-        autoClose: 1000,
-      });
-      localStorage.setItem("users", JSON.stringify(userData));
-      router.push({ name: "Login" });
+
+      // localStorage.setItem("users", JSON.stringify(data));
+      await axios
+        .post("http://localhost:3001/users", data)
+        .then((res) => {
+          console.log("res", res);
+          toast("Registration successful" + userName.value + "!!!", {
+            autoClose: 1000,
+          });
+          router.push({ name: "Login" });
+        })
+        .catch((err) => {
+          toast.error(err, {
+            autoClose: 1000,
+          });
+        });
     }
 
     return {
