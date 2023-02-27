@@ -1,0 +1,61 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Minaxi",
+      "email": "abc@gmail.com",
+      "password": "abc@gmail.com"
+    },
+    {
+      "id": 2,
+      "name": "deesha",
+      "email": "deesha@gmail.com",
+      "password": "deesha@gmail.com"
+    }
+  ],
+  "bookings": [
+    {
+      "id": 1,
+      "username": "abc",
+      "records": [
+        {
+          "recordId": "1",
+          "starttime": "07:00",
+          "endtime": "15:00",
+          "slot": "1",
+          "block": "A",
+          "status": "done"
+        },
+        {
+          "recordId": "1",
+          "starttime": "07:00",
+          "endtime": "15:00",
+          "slot": "1",
+          "block": "A",
+          "status": "done"
+        },
+        {
+          "recordId": "1",
+          "starttime": "07:00",
+          "endtime": "15:00",
+          "slot": "1",
+          "block": "A",
+          "status": "Pending"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "username": "Dev",
+      "records": [
+        {
+          "recordId": "1",
+          "starttime": "07:00",
+          "endtime": "15:00",
+          "slot": "1",
+          "block": "A"
+        }
+      ]
+    }
+  ]
+}
