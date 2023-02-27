@@ -14,15 +14,17 @@
           <th>Status</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-if="bookings?.length" v-for="booking in bookings" :key="id">
+      <tbody v-if="bookings?.length">
+        <tr v-for="booking in bookings" :key="booking.id">
           <td>{{ booking.date ? booking.date : currentDate }}</td>
           <td>{{ booking.starttime ? booking.starttime : currentTime }}</td>
           <td>{{ booking.endtime ? booking.endtime : "-" }}</td>
           <td>{{ booking.slot }}</td>
           <td>{{ booking.block }}</td>
         </tr>
-        <tr v-else>
+      </tbody>
+      <tbody v-else>
+        <tr>
           <td>No bookings</td>
         </tr>
       </tbody>

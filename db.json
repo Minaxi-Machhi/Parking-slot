@@ -1,5 +1,21 @@
 {
   "users": [
+    {
+      "username": "demo",
+      "email": "demo@gmail.com",
+      "password": "demo@gmail.com",
+      "id": 1
+    }
   ],
-  "bookings": []
+  "bookings": [
+    {
+      "username": "demo",
+      "date": "2023-03-02",
+      "starttime": "07:20",
+      "endtime": "20:20",
+      "slot": "Slot 1",
+      "block": "A",
+      "id": 1
+    }
+  ]
 }
