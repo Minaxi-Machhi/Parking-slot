@@ -84,7 +84,6 @@ export default {
       { value: "C", name: "C" },
     ];
 
-    
     let selectedSlot = { value: "Slot 1", name: "Slot 1" };
 
     let selectedBlock = { value: "A", name: "A" };
@@ -126,7 +125,6 @@ export default {
       endtime,
       form,
       getUser,
-      rules,
       selectedBlock,
       selectedSlot,
       slots,
