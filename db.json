@@ -1,10 +1,76 @@
 {
+  "slots": [
+    {
+      "slotNo": "1",
+      "blocks": [
+        {
+          "id": "1",
+          "block": "block A",
+          "src": "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+          "Availability": "Booked Slot"
+        },
+        {
+          "id": "2",
+          "block": "block B",
+          "src": "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+          "Availability": "Free Slot"
+        },
+        {
+          "id": "3",
+          "block": "block A",
+          "src": "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+          "Availability": "Booked Slot"
+        },
+        {
+          "id": "4",
+          "block": "block B",
+          "src": "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+          "Availability": "Free Slot"
+        }
+      ]
+    },
+    {
+      "slotNo": "2",
+      "blocks": [
+        {
+          "id": "5",
+          "block": "block A",
+          "src": "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+          "Availability": "Booked Slot"
+        },
+        {
+          "id": "6",
+          "block": "block B",
+          "src": "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+          "Availability": "Free Slot"
+        },
+        {
+          "id": "7",
+          "block": "block A",
+          "src": "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+          "Availability": "Booked Slot"
+        },
+        {
+          "id": "8",
+          "block": "block B",
+          "src": "https://cdn.vuetifyjs.com/images/cards/road.jpg",
+          "Availability": "Free Slot"
+        }
+      ]
+    }
+  ],
   "users": [
     {
       "username": "demo",
       "email": "demo@gmail.com",
       "password": "demo@gmail.com",
       "id": 1
+    },
+    {
+      "username": "abc@gmail.com",
+      "email": "abc@gmail.com",
+      "password": "abc@gmail.com",
+      "id": 2
     }
   ],
   "bookings": [
@@ -16,6 +82,15 @@
       "slot": "Slot 1",
       "block": "A",
       "id": 1
+    },
+    {
+      "username": "abc@gmail.com",
+      "date": null,
+      "starttime": null,
+      "endtime": null,
+      "slot": "Slot 1",
+      "block": "A",
+      "id": 2
     }
   ]
 }

@@ -2,61 +2,31 @@
   <v-sheet class="bg-deep-purple pa-12" rounded>
     <v-card class="mx-auto" max-width="">
       <v-container fluid>
-        <div class="fill-height">
-          <v-btn size="x-large" block> Slot 1 </v-btn>
-        </div>
-        <v-row dense>
-          <v-col v-for="slot in slot1" :key="slot.id">
-            <v-card>
-              <v-img
-                :src="slot.src"
-                class="align-end"
-                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                height="200px"
-                cover
-              >
-                <v-card-title
-                  class="text-white"
-                  v-text="slot.block"
-                ></v-card-title>
-                <v-btn
-                  :disabled="slot.Availability !== 'Free Slot'"
-                  variant="outlined"
-                  color="primary"
-                  @click="onClick"
-                >
-                  {{ slot.Availability }}
-                </v-btn>
-              </v-img>
-            </v-card>
-          </v-col>
-        </v-row>
-        <v-row>=</v-row>
+        <div class="fill-height"></div>
 
-        <div class="fill-height">
-          <v-btn size="x-large" block> Slot 2 </v-btn>
-        </div>
-        <v-row dense>
-          <v-col v-for="slot in slot1" :key="slot.id">
+        <v-row v-for="slot in slots" :key="slot.id" dense>
+          <v-btn size="x-large" block> Slot {{ slot.slotNo }} </v-btn>
+
+          <v-col v-for="block in slot.blocks" :key="block.id">
             <v-card>
               <v-img
-                :src="slot.src"
+                :src="block.src"
                 class="align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                 height="200px"
                 cover
               >
-                <v-card-title
-                  class="text-white"
-                  v-text="slot.block"
-                ></v-card-title>
+                <v-card-text class="text-white">
+                  {{ block.block }}
+                </v-card-text>
+
                 <v-btn
-                  :disabled="slot.Availability !== 'Free Slot'"
+                  :disabled="block.Availability !== 'Free Slot'"
                   variant="outlined"
-                  @click="onClick"
                   color="primary"
+                  @click="onClick"
                 >
-                  {{ slot.Availability }}
+                  {{ block.Availability }}
                 </v-btn>
               </v-img>
             </v-card>
@@ -68,52 +38,28 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import { useRouter } from "vue-router";
+import axios from "axios";
 
 export default {
-  setup(context) {
+  setup() {
     const router = useRouter();
 
-    const slot1 = reactive([
-      {
-        id: "1",
-        block: "block A",
-        src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-        Availability: "Booked Slot",
-      },
-      {
-        id: "2",
-        block: "block B",
-        src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-        Availability: "Free Slot",
-      },
-      {
-        id: "3",
-        block: "block C",
-        src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-        Availability: "Booked Slot",
-      },
-      {
-        id: "4",
-        block: "block D",
-        src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-        Availability: "Free Slot",
-      },
-      {
-        id: "5",
-        block: "block E",
-        src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-        Availability: "Free Slot",
-      },
-    ]);
+    const slots = ref(null);
+
+    onMounted(async () => {
+      await axios.get("http://localhost:3001/slots").then((res) => {
+        slots.value = res.data;
+      });
+    });
 
     function onClick() {
       // context.emit("pass-selected-block", event.target.value);
       router.push({ name: "Login" });
     }
 
-    return { slot1, onClick };
+    return { slots, onClick };
   },
 };
 </script>
