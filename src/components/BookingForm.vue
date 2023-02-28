@@ -12,23 +12,27 @@
         <v-text-field
           v-model="date"
           label="Select Date"
+          :rules="[rules.required]"
           type="date"
         ></v-text-field>
 
         <v-text-field
           v-model="starttime"
           label="Start Time"
+          :rules="[rules.required]"
           type="time"
         ></v-text-field>
 
         <v-text-field
           v-model="endtime"
+          :rules="[rules.required]"
           label="End Time"
           type="time"
         ></v-text-field>
 
         <v-select
           v-model="selectedSlot"
+          :rules="[rules.required]"
           label="Slot"
           single-line
           :items="['Slot1', 'Slot2']"
@@ -36,6 +40,7 @@
 
         <v-select
           v-model="selectedBlock"
+          :rules="[rules.required]"
           :items="['A', 'B', 'C']"
           label="Block"
           return-object
@@ -43,6 +48,7 @@
 
         <v-btn
           block
+          :disabled="!form"
           color="success"
           size="large"
           type="submit"
@@ -83,6 +89,10 @@ export default {
       return user;
     });
 
+    const rules = {
+      required: (value) => !!value || "Required.",
+    };
+
     async function bookSlot() {
       let data = {
         username: getUser.value,
@@ -94,14 +104,15 @@ export default {
       };
 
       const api = "http://localhost:3001/bookings";
-      const query = { username: getUser.value };
 
-      await axios.post(api, query).then((res) => {
-        toast("Booked SuccessFully !!! ", {
-          autoClose: 2000,
+      await axios
+        .post(api, data, { params: { username: getUser.value } })
+        .then((res) => {
+          toast("Booked SuccessFully !!! ", {
+            autoClose: 2000,
+          });
+          router.push({ name: "Dashboard" });
         });
-        router.push({ name: "Dashboard" });
-      });
     }
 
     return {
@@ -110,6 +121,7 @@ export default {
       endtime,
       form,
       getUser,
+      rules,
       selectedBlock,
       selectedSlot,
       starttime,

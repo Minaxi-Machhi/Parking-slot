@@ -66,8 +66,10 @@ export default {
 
     onMounted(async () => {
       if (getUser) {
+        const api = "http://localhost:3001/bookings";
+
         await axios
-          .get("http://localhost:3001/bookings?username=" + getUser.value)
+          .get(api, { params: { username: getUser.value } })
           .then((res) => {
             bookings.value = res.data;
           });
