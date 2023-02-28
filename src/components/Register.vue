@@ -116,14 +116,12 @@ export default {
     }
 
     async function onSubmit() {
-      
       const data = {
         username: userName.value,
         email: email.value,
         password: password.value,
       };
 
-      // localStorage.setItem("users", JSON.stringify(data));
       await axios
         .post("http://localhost:3001/users", data)
         .then((res) => {

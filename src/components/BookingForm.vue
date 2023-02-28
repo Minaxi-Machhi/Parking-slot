@@ -31,18 +31,13 @@
           v-model="selectedSlot"
           label="Slot"
           single-line
-          :items="slots"
-          item-title="name"
-          item-value="value"
-          return-object
+          :items="['Slot1', 'Slot2']"
         ></v-select>
 
         <v-select
           v-model="selectedBlock"
-          :items="blocks"
+          :items="['A', 'B', 'C']"
           label="Block"
-          item-title="name"
-          item-value="value"
           return-object
         ></v-select>
 
@@ -73,20 +68,9 @@ export default {
 
     const router = useRouter();
 
-    const slots = [
-      { value: "Slot 1", name: "Slot 1" },
-      { value: "Slot 2", name: "Slot 2" },
-    ];
+    let selectedSlot = ref(null);
 
-    const blocks = [
-      { value: "A", name: "A" },
-      { value: "B", name: "B" },
-      { value: "C", name: "C" },
-    ];
-
-    let selectedSlot = { value: "Slot 1", name: "Slot 1" };
-
-    let selectedBlock = { value: "A", name: "A" };
+    let selectedBlock = ref(null);
 
     const date = ref(null);
 
@@ -108,18 +92,19 @@ export default {
         slot: selectedSlot.value,
         block: selectedBlock.value,
       };
-      await axios
-        .post("http://localhost:3001/bookings?username=" + getUser.value, data)
-        .then((res) => {
-          toast("Booked SuccessFully !!! ", {
-            autoClose: 2000,
-          });
-          router.push({ name: "Dashboard" });
+
+      const api = "http://localhost:3001/bookings";
+      const query = { username: getUser.value };
+
+      await axios.post(api, query).then((res) => {
+        toast("Booked SuccessFully !!! ", {
+          autoClose: 2000,
         });
+        router.push({ name: "Dashboard" });
+      });
     }
 
     return {
-      blocks,
       bookSlot,
       date,
       endtime,
@@ -127,7 +112,6 @@ export default {
       getUser,
       selectedBlock,
       selectedSlot,
-      slots,
       starttime,
     };
   },

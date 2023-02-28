@@ -18,7 +18,9 @@ import { useRouter } from "vue-router";
 export default {
   setup() {
     const router = useRouter();
+
     const tab = ref(null);
+
     const items = [
       { id: 1, to: "/", label: "Home" },
       { id: 2, to: "/register", label: "Register" },
@@ -30,10 +32,7 @@ export default {
       return localStorage.getItem("user");
     });
 
-    // onMounted(() => {});
-
     function logoutUser() {
-      console.log("here");
       localStorage.removeItem("user");
       router.push({ name: "MainPage" });
     }
