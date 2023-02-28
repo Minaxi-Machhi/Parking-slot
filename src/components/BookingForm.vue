@@ -124,8 +124,6 @@ export default {
 
     let dialog = ref(false);
 
-    const picker = new Date().toISOString().substr(0, 10);
-
     const getUser = computed(() => {
       const user = localStorage.getItem("user");
       return user;
@@ -215,7 +213,6 @@ export default {
       endtime,
       form,
       getUser,
-      picker,
       onCancel,
       rules,
       selectedBlock,
