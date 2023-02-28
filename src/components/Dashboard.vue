@@ -11,7 +11,6 @@
           <th>End Time</th>
           <th>Slot</th>
           <th>Block</th>
-          <th>Status</th>
         </tr>
       </thead>
       <tbody v-if="bookings?.length">

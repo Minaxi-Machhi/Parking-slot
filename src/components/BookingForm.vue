@@ -35,13 +35,14 @@
           :rules="[rules.required]"
           label="Slot"
           single-line
-          :items="['Slot1', 'Slot2']"
+          :items="slots"
+          @update:modelValue="changeSelection"
         ></v-select>
 
         <v-select
           v-model="selectedBlock"
           :rules="[rules.required]"
-          :items="['A', 'B', 'C']"
+          :items="blocks"
           label="Block"
           return-object
         ></v-select>
@@ -93,8 +94,9 @@
     </v-card>
   </v-sheet>
 </template>
+
 <script lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -116,7 +118,13 @@ export default {
 
     const endtime = ref(null);
 
+    const slots = ref([]);
+
+    const blocks = ref([]);
+
     let dialog = ref(false);
+
+    const picker = new Date().toISOString().substr(0, 10);
 
     const getUser = computed(() => {
       const user = localStorage.getItem("user");
@@ -126,6 +134,30 @@ export default {
     const rules = {
       required: (value) => !!value || "Required.",
     };
+
+    onMounted(async () => {
+      await axios.get("http://localhost:3001/slots").then((res) => {
+        res.data.map((d) => {
+          slots.value.push(d.slotNo);
+        });
+      });
+    });
+
+    async function changeSelection(val) {
+      blocks.value = [];
+
+      const api = "http://localhost:3001/slots";
+
+      await axios.get(api, { params: { slotNo: val } }).then((res) => {
+        res.data.map((d) => {
+          d.blocks.map((val) => {
+            if (val.Availability === "Free Slot") {
+              blocks.value.push(val.block);
+            }
+          });
+        });
+      });
+    }
 
     async function bookSlot() {
       let data = {
@@ -174,17 +206,21 @@ export default {
     }
 
     return {
+      blocks,
       bookSlot,
+      changeSelection,
       date,
       dialog,
       downloadFile,
       endtime,
       form,
       getUser,
+      picker,
       onCancel,
       rules,
       selectedBlock,
       selectedSlot,
+      slots,
       starttime,
     };
   },
