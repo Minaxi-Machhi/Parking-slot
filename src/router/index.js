@@ -41,7 +41,7 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-})
+})  
 router.beforeEach((to, from, next) => {
   const loggedUser = localStorage.getItem('user')
   if (to.meta.requiresAuth && !loggedUser) {

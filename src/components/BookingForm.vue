@@ -46,17 +46,49 @@
           return-object
         ></v-select>
 
-        <v-btn
-          block
-          :disabled="!form"
-          color="success"
-          size="large"
-          type="submit"
-          variant="elevated"
-          @click="bookSlot()"
-        >
-          Book
-        </v-btn>
+        <v-dialog v-model="dialog" height="250px" width="400px">
+          <template v-slot:activator="{ props }">
+            <v-btn
+              v-bind="props"
+              block
+              :disabled="!form"
+              color="success"
+              size="large"
+              type="submit"
+              variant="elevated"
+              @click="bookSlot()"
+            >
+              Book
+            </v-btn>
+          </template>
+
+          <v-card>
+            <v-card-title>Booking Details</v-card-title>
+
+            <v-divider></v-divider>
+
+            <v-card-text style="height: 400px">
+              <div class="text-h6">{{ starttime }} - {{ endtime }}</div>
+              <div class="text-h6">
+                {{ selectedSlot }} - {{ selectedBlock }}
+              </div>
+              <p>Charges - 2$</p>
+              <p>PAYMENT DONE</p>
+            </v-card-text>
+
+            <v-divider></v-divider>
+
+            <v-card-actions>
+              <v-btn color="blue-darken-1" variant="text" @click="downloadFile">
+                Download Recipt
+              </v-btn>
+
+              <v-btn color="blue-darken-1" variant="text" @click="onCancel">
+                Cancel
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-form>
     </v-card>
   </v-sheet>
@@ -83,6 +115,8 @@ export default {
     const starttime = ref(null);
 
     const endtime = ref(null);
+
+    let dialog = ref(false);
 
     const getUser = computed(() => {
       const user = localStorage.getItem("user");
@@ -111,16 +145,43 @@ export default {
           toast("Booked SuccessFully !!! ", {
             autoClose: 2000,
           });
-          router.push({ name: "Dashboard" });
+          dialog.value = true;
         });
+    }
+
+    function downloadFile() {
+      let text = "hello";
+      let filename = "booking.pdf";
+      let element = document.createElement("a");
+      element.setAttribute(
+        "href",
+        "data:application/json;charset=utf-8," + encodeURIComponent(text)
+      );
+      element.setAttribute("download", filename);
+
+      element.style.display = "none";
+      document.body.appendChild(element);
+
+      element.click();
+      document.body.removeChild(element);
+      dialog.value = false;
+      router.push({ name: "Dashboard" });
+    }
+
+    function onCancel() {
+      dialog.value = false;
+      router.push({ name: "Dashboard" });
     }
 
     return {
       bookSlot,
       date,
+      dialog,
+      downloadFile,
       endtime,
       form,
       getUser,
+      onCancel,
       rules,
       selectedBlock,
       selectedSlot,

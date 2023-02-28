@@ -1,0 +1,1 @@
+import{l as o,n as r,m as c}from"./index.e3c41793.js";import{u as n}from"./_plugin-vue_export-helper.4e3b539c.js";const m=o()({name:"VLabel",props:{text:String,clickable:Boolean,...r()},setup(a,t){let{slots:e}=t;return n(()=>{var l;return c("label",{class:["v-label",{"v-label--clickable":a.clickable}]},[a.text,(l=e.default)==null?void 0:l.call(e)])}),{}}});export{m as V};

@@ -55,7 +55,6 @@ export default {
     });
 
     function onClick() {
-      // context.emit("pass-selected-block", event.target.value);
       router.push({ name: "Login" });
     }
 
