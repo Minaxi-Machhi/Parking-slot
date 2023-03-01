@@ -142,6 +142,7 @@ export default {
     });
 
     async function changeSelection(val) {
+      selectedBlock.value = null
       blocks.value = [];
 
       const api = "http://localhost:3001/slots";
