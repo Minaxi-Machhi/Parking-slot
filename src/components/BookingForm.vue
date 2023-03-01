@@ -101,6 +101,7 @@ import axios from "axios";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import { useRouter } from "vue-router";
+import { auth } from "../firebase/init.js";
 
 export default {
   setup() {
@@ -124,16 +125,22 @@ export default {
 
     let dialog = ref(false);
 
-    const getUser = computed(() => {
-      const user = localStorage.getItem("user");
-      return user;
-    });
+    const getUser = ref(null);
+
+    // const getUser = computed(() => {
+    //   const user = localStorage.getItem("user");
+    //   return user;
+    // });
 
     const rules = {
       required: (value) => !!value || "Required.",
     };
 
     onMounted(async () => {
+      auth.onAuthStateChanged((user) => {
+        getUser.value = user?.email;
+      });
+
       await axios.get("http://localhost:3001/slots").then((res) => {
         res.data.map((d) => {
           slots.value.push(d.slotNo);
@@ -142,7 +149,7 @@ export default {
     });
 
     async function changeSelection(val) {
-      selectedBlock.value = null
+      selectedBlock.value = null;
       blocks.value = [];
 
       const api = "http://localhost:3001/slots";

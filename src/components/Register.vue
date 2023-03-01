@@ -66,6 +66,8 @@ import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import axios from "axios";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/init.js";
 
 export default {
   setup() {
@@ -116,26 +118,49 @@ export default {
     }
 
     async function onSubmit() {
-      const data = {
-        username: userName.value,
-        email: email.value,
-        password: password.value,
-      };
+      //<------------------------------------------------REGISTER USING FIREBASE START----------------------------------------------------------->
 
-      await axios
-        .post("http://localhost:3001/users", data)
-        .then((res) => {
-          console.log("res", res);
+      createUserWithEmailAndPassword(auth, email.value, password.value)
+        .then((credential) => {
+          console.log(credential.user);
           toast("Registration successful" + userName.value + "!!!", {
             autoClose: 1000,
           });
           router.push({ name: "Login" });
         })
-        .catch((err) => {
-          toast.error(err, {
-            autoClose: 1000,
+        .catch((error) => {
+          console.log(error);
+          toast.error("Email already in use", {
+            autoClose: 2000,
           });
         });
+
+      //<------------------------------------------------REGISTER USING FIREBASE END--------------------------------------------------------------->
+
+      //<------------------------------------------------REGISTER USING API THROUGH END------------------------------------------------------------>
+
+      // const data = {
+      //   username: userName.value,
+      //   email: email.value,
+      //   password: password.value,
+      // };
+
+      // await axios
+      //   .post("http://localhost:3001/users", data)
+      //   .then((res) => {
+      //     console.log("res", res);
+      //     toast("Registration successful" + userName.value + "!!!", {
+      //       autoClose: 1000,
+      //     });
+      //     router.push({ name: "Login" });
+      //   })
+      //   .catch((err) => {
+      //     toast.error(err, {
+      //       autoClose: 1000,
+      //     });
+      //   });
+
+      //<------------------------------------------------REGISTER USING API THROUGH END------------------------------------------------------------>
     }
 
     return {

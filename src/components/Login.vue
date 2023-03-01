@@ -47,11 +47,17 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import axios from "axios";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase/init.js";
+import { useAppStore } from "@/store/app";
+const store = useAppStore();
+
+const emit = ["loginUser"];
 
 export default {
   setup(ctx) {
@@ -80,27 +86,50 @@ export default {
     }
 
     async function onSubmit() {
-      let users = [];
+      //<--------------------------------------------------LOGIN USING FIREBASE START------------------------------------------------------->
 
-      await axios.get("http://localhost:3001/users").then((res) => {
-        users = res.data;
-      });
-
-      const isMatched = users.find(
-        (user) => user.email === email.value && user.password === password.value
-      );
-
-      if (isMatched) {
-        toast("Login successful !!! !", {
-          autoClose: 2000,
+      signInWithEmailAndPassword(auth, email.value, password.value)
+        .then((res) => {
+          toast("Login successful !!! !", {
+            autoClose: 1000,
+          });
+          store.setUser(email.value);
+          localStorage.setItem("user", email.value);
+          emit("loginUser",email.value);
+          router.push({ name: "Booking" });
+        })
+        .catch((err) => {
+          console.log(err.message.substr(22, 14));
+          toast.error(err.message.substr(22, 14), {
+            autoClose: 2000,
+          });
         });
-        localStorage.setItem("user", isMatched.username);
-        router.push({ name: "Booking" });
-      } else {
-        toast.error("Invalid Credentials !!! !", {
-          autoClose: 2000,
-        });
-      }
+
+      //<--------------------------------------------------LOGIN USING FIREBASE END----------------------------------------------------------->
+
+      //<--------------------------------------------------LOGIN USING API THROUGH START------------------------------------------------------>
+      // let users = [];
+
+      // await axios.get("http://localhost:3001/users").then((res) => {
+      //   users = res.data;
+      // });
+
+      // const isMatched = users.find(
+      //   (user) => user.email === email.value && user.password === password.value
+      // );
+
+      // if (isMatched) {
+      //   toast("Login successful !!! !", {
+      //     autoClose: 2000,
+      //   });
+      //   localStorage.setItem("user", isMatched.username);
+      //   router.push({ name: "Booking" });
+      // } else {
+      //   toast.error("Invalid Credentials !!! !", {
+      //     autoClose: 2000,
+      //   });
+      // }
+      //<--------------------------------------------------LOGIN USING API THROUGH END-------------------------------------------------------->
     }
 
     return {

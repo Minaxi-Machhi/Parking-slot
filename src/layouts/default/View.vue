@@ -4,7 +4,7 @@
       <v-tab v-for="item in items" :key="item.id" :value="item">
         <router-link :to="item.to">{{ item.label }}</router-link>
       </v-tab>
-      <v-btn color="primary" v-if="isLoggedIn" @click="logoutUser"
+      <v-btn color="primary" v-if="showLogout" @click="logoutUser"
         >Logout</v-btn
       >
     </v-tabs>
@@ -13,13 +13,20 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { signOut } from "firebase/auth";
+import { auth } from "@/firebase/init";
+import { useAppStore } from "@/store/app";
+const store = useAppStore();
+
 export default {
   setup() {
     const router = useRouter();
 
     const tab = ref(null);
+
+    const showLogout = ref(false);
 
     const items = [
       { id: 1, to: "/", label: "Home" },
@@ -28,15 +35,26 @@ export default {
       { id: 4, to: "/booking", label: "Booking" },
     ];
 
-    const isLoggedIn = computed(() => {
-      return localStorage.getItem("user");
+    function loginUser() {
+      console.log("hey");
+    }
+
+    onMounted(() => {
+      if (localStorage.getItem("user") || store.currentUser) {
+        showLogout.value = true;
+      }
     });
 
     function logoutUser() {
-      localStorage.removeItem("user");
-      router.push({ name: "MainPage" });
+      signOut(auth).then((res) => {
+        router.push({ name: "MainPage" });
+      });
+      showLogout.value = false;
+
+      // localStorage.removeItem("user");
+      // router.push({ name: "MainPage" });
     }
-    return { isLoggedIn, items, logoutUser, tab };
+    return { showLogout, items, logoutUser, tab, loginUser };
   },
 };
 </script>
